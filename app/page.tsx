@@ -9,7 +9,9 @@ const rye = Rye({
 export default function Home() {
   return (
     <main className={`flex flex-col items-center justify-center p-24 ${rye.className}`}>
-      <Schedule />
+      <div className="mt-[25%]">
+        <Schedule />
+      </div>
     </main>
   );
 }

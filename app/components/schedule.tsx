@@ -21,7 +21,7 @@ export default function Schedule() {
     let idx = 0;
 
     return (
-        <div className="flex flex-col gap-32">
+        <div className="flex flex-col items-center gap-32">
             {events.map(({ eventId, name, points, startTime, endTime, description, locations }) => {
                 const start = new Date(startTime * 1000).toLocaleTimeString("en-US", timeOptions);
                 const end =  new Date(endTime * 1000).toLocaleTimeString("en-US", timeOptions)
