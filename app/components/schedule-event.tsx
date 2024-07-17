@@ -4,6 +4,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 export type ScheduleEventParams = {
     color: string,
     eventName: string,
+    date: string,
     startTime: string,
     endTime: string,
     points: number,
@@ -11,7 +12,7 @@ export type ScheduleEventParams = {
     location: string
 }
 
-export default function ScheduleEvent({ color, eventName, startTime, endTime, points, description, location }: ScheduleEventParams) {
+export default function ScheduleEvent({ color, eventName, date, startTime, endTime, points, description, location }: ScheduleEventParams) {
     const ref = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
@@ -25,10 +26,10 @@ export default function ScheduleEvent({ color, eventName, startTime, endTime, po
             return;
         }
 
-        const { top, width } = ref.current.getBoundingClientRect();
+        const { top, bottom, width } = ref.current.getBoundingClientRect();
         const radius = (Math.max(window.innerWidth, window.innerHeight) / 2) * 1.25 - width / 2;
 
-        const distance = Math.abs(top - (window.innerHeight / 2));
+        const distance = Math.abs((top + bottom) / 2 - (window.innerHeight / 2));
         const angle = Math.asin(distance / radius);
 
         const x = radius * Math.cos(angle) - radius;
@@ -54,6 +55,7 @@ export default function ScheduleEvent({ color, eventName, startTime, endTime, po
             <div className="rounded-t-md w-full text-3xl p-2 font-bold" style={{ backgroundColor: color }}>{eventName}</div>
             <div className="grid grid-cols-[5fr_1fr_5fr] min-h-32 w-full items-center">
                 <div className="p-4 h-fit">
+                    <p className={"text-xl font-bold"}>{date}</p>
                     <p className={"text-xl font-bold"}>{startTime}</p>
                     <p>{endTime}</p>
                 </div>
