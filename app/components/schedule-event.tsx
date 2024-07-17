@@ -13,7 +13,6 @@ export type ScheduleEventParams = {
 
 export default function ScheduleEvent({ color, eventName, startTime, endTime, points, description, location }: ScheduleEventParams) {
     const ref = useRef<HTMLDivElement>(null);
-    const dampingFactor = 0.8;
 
     useLayoutEffect(() => {
         onScroll();
@@ -26,12 +25,12 @@ export default function ScheduleEvent({ color, eventName, startTime, endTime, po
             return;
         }
 
-        const { top, bottom } = ref.current.getBoundingClientRect();
-        const y = (top + bottom) / 2
-        const radius = Math.max(window.innerWidth, window.innerHeight) / 2;
+        const { top, width } = ref.current.getBoundingClientRect();
+        const radius = (Math.max(window.innerWidth, window.innerHeight) / 2) * 1.25 - width / 2;
 
-        const distance = Math.abs(y - (window.innerHeight / 2));
-        const angle = Math.asin(distance / radius * dampingFactor);
+        const distance = Math.abs(top - (window.innerHeight / 2));
+        const angle = Math.asin(distance / radius);
+
         const x = radius * Math.cos(angle) - radius;
 
         ref.current.style.transform = `translate(${x}px)`;
@@ -51,9 +50,9 @@ export default function ScheduleEvent({ color, eventName, startTime, endTime, po
     }
 
     return (
-        <div className="bg-white flex flex-col items-center min-w-[300px] max-w-[50%] min-h-[240px] rounded-md text-black text-center text-lg" ref={ref}>
+        <div className="bg-slate-100 flex flex-col items-center min-w-[300px] max-w-[50%] min-h-[240px] rounded-lg text-black text-center text-lg" ref={ref}>
             <div className="rounded-t-md w-full text-3xl p-2 font-bold" style={{ backgroundColor: color }}>{eventName}</div>
-            <div className="grid grid-cols-[4fr_1fr_4fr] min-h-32 w-full items-center">
+            <div className="grid grid-cols-[5fr_1fr_5fr] min-h-32 w-full items-center">
                 <div className="p-4 h-fit">
                     <p className={"text-xl font-bold"}>{startTime}</p>
                     <p>{endTime}</p>
@@ -61,9 +60,8 @@ export default function ScheduleEvent({ color, eventName, startTime, endTime, po
                 <div className="h-full" style={{ backgroundColor: color }}></div>
                 <div className="p-4 h-fit"><p className="bg-black rounded-lg p-1 font-bold" style={{ backgroundColor: pointsToColor(points) }}>{`${points} points`}</p></div>
             </div>
-            <div className="p-4 rounded-md" style={{ backgroundColor: color }}>
+            <div className="flex flex-col justify-center p-8 rounded-md rounded-b-lg min-h-48 gap-8" style={{ backgroundColor: color }}>
                 <p>{description}</p>
-                <br />
                 <p>{location}</p>
             </div>
         </div>
